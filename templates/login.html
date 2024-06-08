@@ -1,0 +1,40 @@
+{% extends 'minimal.html' %}
+
+{% block main %}
+<!-- Login page. -->
+<div class="padding-lg flex" id="login_container">
+  <div class="padding-lg">
+    <h1 class="text-xl">Liticket</h1>
+    <p>The lightweight ticket system</p>
+    <p><i>{{ version }}</i></p>
+  </div>
+  <div class="padding-lg">
+    <h1>Login</h1>
+    <form action="{{ url_for('login') }}" method="post">
+      {% if error %}
+        <p class="error">{{ error }}</p>
+      {% endif %}
+      <div>
+        <label for="username">Username:</label>
+        <input type="text" id="username" name="username">
+      </div>
+      <div>
+        <label for="password">Password:</label>
+        <input type="password" id="password" name="password">
+      </div>
+      <div>
+        <input type="submit" value="Login">
+      </div>
+    </form>
+  </div>
+</div>
+<script>
+  // Animates fade in effect.
+  const animate = () => {
+    container = document.getElementById('login_container')
+    container.style.opacity = '1'
+    container.style.transform = 'translateY(0)'
+  }
+  animate()
+</script>
+{% endblock %}

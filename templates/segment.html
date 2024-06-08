@@ -1,0 +1,43 @@
+<div class="segment">
+  <!-- A segment that contains tickets returned by a given query. Used for dashboard and search results. -->
+  <h3>{{ query.name }}</h3>
+  
+  {% if query.id %}
+  <div>
+    <div class="h-flex">
+      <form action="/dashboard" method="POST">
+        <input type="hidden" name="move_segment" value="up">
+        <input type="hidden" name="segment_id" value="{{ query.id }}">
+        <input type="submit" value="Move up">
+      </form>
+      <form action="/dashboard" method="POST">
+        <input type="hidden" name="move_segment" value="down">
+        <input type="hidden" name="segment_id" value="{{ query.id }}">
+        <input type="submit" value="Move down">
+      </form>
+      <form action="/dashboard" method="POST">
+        <input type="hidden" name="delete_segment" value="{{ query.id }}">
+        <input type="submit" value="Remove">
+      </form>
+    </div>
+  </div>
+  {% endif %}
+  
+  <ul>
+    {% if tickets|length == 0 %}
+    <li>No tickets found</li>
+    {% endif %}
+    {% for ticket in tickets %}
+    <li>
+      <div>
+        <span class="id">#{{ ticket.id }}</span>
+        <span class="owner">({{ ticket.owner | id_to_name }})</span>
+        <span class="status">{{ ticket.status }}</span>
+        <br>
+        <span class="title"><a href="/ticket/{{ ticket.id }}">{{ ticket.title }}</a></span>
+        <span class="created_at">({{ ticket.created_at|ctime }})</span>
+      </div>
+      <br>
+    {% endfor %}
+  </ul>
+</div>

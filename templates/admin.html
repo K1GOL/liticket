@@ -1,0 +1,138 @@
+{% extends 'base.html' %}
+{% block content %}
+<div class="padding-lg">
+    <!-- Page for admin actions -->
+    <h1>Admin control panel</h1>
+
+    <h2>Create new ticket queue</h2>
+    <form action="/admin" method="POST">
+        <input type="hidden" name="action" value="create_queue">
+        <label for="queue_name">Name:</label>
+        <input type="text" name="queue_name" required><br>
+        <label for="queue_description">Description:</label>
+        <input type="text" name="queue_description"><br>
+        <input type="submit" value="Create">
+    </form>
+
+    <h2>Create new ticket status</h2>
+    <form action="/admin" method="POST">
+        <input type="hidden" name="action" value="create_status">
+        <label for="status_name">Name:</label>
+        <input type="text" name="status_name" required><br>
+        <label for="status_description">Description:</label>
+        <input type="text" name="status_description"><br>
+        <label for="status_color">Color:</label>
+        <input type="color" name="status_color" required><br>
+        <input type="submit" value="Create">
+    </form>
+
+    <h2>Create new custom field type</h2>
+    <form action="/admin" method="POST">
+        <input type="hidden" name="action" value="create_custom_field">
+        <label for="field_name">Name:</label>
+        <input type="text" name="field_name" required><br>
+        <label for="field_description">Description:</label>
+        <input type="text" name="field_description"><br>
+        <label for="required">Required:</label>
+        <input type="checkbox" name="required"><br>
+        <label for="enum">Enum:</label>
+        <input type="checkbox" name="enum"><br>
+        <input type="submit" value="Create">
+    </form>
+
+    <h2>Add new option for custom field type</h2>
+    <form action="/admin" method="POST">
+        <input type="hidden" name="action" value="create_field_option">
+        <label for="field_name">Field name:</label>
+        <select name="field_id" required>
+            {% for field in custom_fields %}
+            {% if field['enum'] %}
+            <option value="{{ field['id'] }}">{{ field['name'] }}</option>
+            {% endif %}
+            {% endfor %}
+        </select><br>
+        <label for="option">Option:</label>
+        <input type="text" name="option" required><br>
+        <input type="submit" value="Create">
+    </form>
+
+    <h2>Delete ticket queue</h2>
+    <form action="/admin" method="POST">
+        <input type="hidden" name="action" value="delete_queue">
+        <label for="queue_id">Select queue to delete:</label>
+        <select name="queue_id" required>
+            {% for queue in queues %}
+            <option value="{{ queue['id'] }}">{{ queue['name'] }}</option>
+            {% endfor %}
+        </select><br>
+        <input type="submit" value="Delete">
+    </form>
+
+    <h2>Delete ticket status</h2>
+    <form action="/admin" method="POST">
+        <input type="hidden" name="action" value="delete_status">
+        <label for="status_id">Select status to delete:</label>
+        <select name="status_id" required>
+            {% for status in statuses %}
+            <option value="{{ status['id'] }}">{{ status['name'] }}</option>
+            {% endfor %}
+        </select><br>
+        <input type="submit" value="Delete">
+    </form>
+
+    <h2>Delete custom field type</h2>
+    <form action="/admin" method="POST">
+        <input type="hidden" name="action" value="delete_field">
+        <label for="field_id">Select field type to delete:</label>
+        <select name="field_id" required>
+            {% for field in custom_fields %}
+            <option value="{{ field['id'] }}">{{ field['name'] }}</option>
+            {% endfor %}
+        </select><br>
+        <input type="submit" value="Delete">
+    </form>
+
+    <h2>Delete custom field option</h2>
+    <form action="/admin" method="POST">
+        <input type="hidden" name="action" value="delete_field_option">
+        <label for="option">Select option:</label>
+        <select name="option" required>
+            {% for opt in custom_options %}
+            <option value="{{ opt['field'] + ':' + opt['value'] }}">{{ (custom_fields|selectattr('id', 'equalto', opt['field'])|first)['name'] + ' / ' + opt['value'] }}</option>
+            {% endfor %}
+        </select><br>
+        <input type="submit" value="Delete">
+    </form>
+
+    <h2>Create new user</h2>
+    <form action="/create_user" method="POST">
+        <label for="user_id" >User ID:</label>
+        <input type="text" name="user_id" required><br>
+        <p><i>The user ID must be unique and is used internally to identify users.</i></p>
+        <label for="username">Username:</label>
+        <input type="text" name="username" required><br>
+        <p><i>The username is used in the application to identify users and to log in.</i></p>
+        <label for="dipslay_name">Display name:</label>
+        <input type="text" name="display_name" required><br>
+        <p><i>The display name is used to display the user's name.</i></p>
+        <label for="password">Password:</label>
+        <input type="password" name="password" required><br>
+        <p><i>The password is used to log in. This can be changed later.</i></p>
+        <label for="admin">Admin:</label>
+        <input type="checkbox" name="admin"><br>
+        <p><i>Check this if the user is an administrator.</i></p>
+        <input type="submit" value="Create">
+    </form>
+
+    <h2>Delete user</h2>
+    <form action="/delete_user" method="POST">
+        <label for="target">Select user to delete:</label>
+        <select name="target" required>
+            {% for user in users %}
+            <option value="{{ user['id'] }}">{{ user['username'] }}</option>
+            {% endfor %}
+        </select><br>
+        <input type="submit" value="Delete" onclick="return confirm('Are you sure? This cannot be undone.')">
+    </form>
+</div>
+{% endblock %}

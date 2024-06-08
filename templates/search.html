@@ -1,0 +1,33 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<!-- Search results page. -->
+<div class="padding-lg">
+  <div id="searchResults"></div>
+</div>
+{% endblock %}
+
+{% block script %}
+<script>
+// Get search results from the server.
+const segmentPromise = fetch("/segment", {
+  method: "POST",
+  headers: {
+    "Content-Type": "application/json"
+  },
+  body: JSON.stringify({
+    query: {{ query | tojson }}
+  })
+})
+.then(response => response.text())
+.then(html => {
+  const segment = document.createElement('div');
+  segment.innerHTML = html;
+  return segment;
+})
+.then(segment => {
+  const searchResults = document.getElementById('searchResults');
+  searchResults.appendChild(segment);
+});
+</script>
+{% endblock %}

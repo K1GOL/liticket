@@ -1,0 +1,24 @@
+{% extends 'minimal.html' %}
+
+{% block main %}
+  <!-- The base template for most pages. Includes header. -->
+  <header>
+    <div class="padding-md">
+      <h2>Liticket</h2>
+      <nav>
+        <a href="/dashboard" class="padding-md">Dashboard</a>
+        <a href="/logout" class="padding-md">Logout</a>
+        <a href="/change_password" class="padding-md">Change password</a>
+        <a href="/admin" class="padding-md">Admin panel</a>
+        <form action="/search" class="padding-md">
+          <input type="search" name="query" placeholder="Search">
+          <input type="submit" value="Search">
+        </form>
+      </nav>
+    </div>
+  </header>
+  <hr>
+  {% block content %}{% endblock %}
+
+  {% block script %}{% endblock %}
+{% endblock %}

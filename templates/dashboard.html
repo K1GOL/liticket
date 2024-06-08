@@ -1,0 +1,75 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<!-- Dashboard page. -->
+<div class="padding-lg">
+  <!-- Header section -->
+  <h1>Dashboard</h1>
+  <h2>Welcome {{ current_user.display_name }}!</h2>
+  <div>
+    <form action="/create_ticket" method="POST">
+      <input type="submit" value="New ticket">
+    </form>
+  </div>
+  <!-- Saved search queries will be inserted below. -->
+  <div id="dashboard">
+  </div>
+  <!-- Customization section. Allows users to add queries to the dashboard. -->
+  <h3>Customize dashboard</h3>
+  <form action="/dashboard" method="POST">
+    <select name="add_query">
+      {% for query in saved_queries %}
+        <option value="{{ query.id }}">{{ query.name }}</option>
+      {% endfor %}
+    </select>
+    <input type="submit" value="Add to dashboard"></input>
+  </form>
+
+  <!-- Create new saved query. -->
+  <h3>Create new saved query</h3>
+  <form action="/add_query" method="POST">
+    <div class="h-flex">
+      <input type="text" name="query_name" placeholder="Name"></input>
+      <textarea name="query" placeholder="SQL-query WHERE clause"></textarea>
+      <input checked type="checkbox" name="private">Private</input>
+      <input type="submit" value="Create"></input>
+    </div>
+  </form>
+</div>
+{% endblock %}
+
+{% block script %}
+<script>
+
+// Fetch each query section on the dashboard.
+const saved_queries = {{ dashboard_queries | tojson }}
+
+const segmentPromises = saved_queries.map(query =>
+  fetch("/segment", {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json"
+    },
+    body: JSON.stringify({
+      query
+    })
+  })
+  .then(response => response.text())
+  .then(html => {
+    const segment = document.createElement('div');
+    segment.innerHTML = html;
+    return segment;
+  })
+);
+
+Promise.all(segmentPromises)
+  .then(segments => {
+    const dashboard = document.getElementById('dashboard');
+    segments.forEach(segment => {
+      dashboard.appendChild(segment);
+    });
+  });
+</script>
+{% endblock %}
+
+
