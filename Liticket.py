@@ -7,9 +7,10 @@ import util
 from util import hash_password
 import uuid
 import os
+import pkg_resources
 
 def create_app():
-    VERSION = '1.0.0'
+    VERSION = pkg_resources.get_distribution('Liticket').version
 
     app = Flask(__name__)
 

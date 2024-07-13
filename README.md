@@ -6,10 +6,10 @@ Liticket is a ticketing system designed to be easy to use and lightweight. It is
 
 ### Production
 
-Download/build a wheel-file and run it with, for example, Waitress:
+Download the repo and run it with, for example, Waitress:
 ```
 $ pip install waitress
-$ waitress-serve -call 'app:create_app'
+$ waitress-serve --call 'Liticket:create_app'
 ```
 
 ### Development

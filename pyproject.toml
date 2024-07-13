@@ -1,3 +1,7 @@
 [project]
 name = "Liticket"
-version = "1.0.0"
+version = "1.0.3"
+description = "Lightweight ticket system"
+readme = "README.md"
+license = {file = "LICENSE"}
+authors = [{name = "K1GOL", email = "42120370+K1GOL@users.noreply.github.com"}]
